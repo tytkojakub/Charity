@@ -171,4 +171,50 @@
 	if (form !== null) {
 		new FormSteps(form);
 	}
+	//PODSUMOWANIE - PRZEKAZANIE DANYCH
+	// ilosć worków
+	const showResults = document.getElementById('showResults');
+	showResults.addEventListener('click', () => {
+		const bagsCount = document.querySelector("#bags").value;
+		document.querySelector('#bagsResult').innerText = bagsCount + " ";
+	})
+	//fundacja
+
+	// ulica
+	showResults.addEventListener('click', () => {
+		const street = document.querySelector('#street').value;
+		document.querySelector('#streetResult').innerText = street;
+	})
+	// miasto
+	showResults.addEventListener('click', () => {
+		const city = document.querySelector('#city').value;
+		document.querySelector('#cityResult').innerText = city;
+	})
+	//kod pocztowy
+	showResults.addEventListener('click', () => {
+		const postcode = document.querySelector('#postcode').value;
+		document.querySelector('#postcodeResult').innerText = postcode;
+	})
+	//nr. tel
+	showResults.addEventListener('click', () => {
+		const phone = document.querySelector('#phone').value;
+		document.querySelector('#phoneResult').innerText = phone;
+	})
+	//data
+	showResults.addEventListener('click', () => {
+		const data = document.querySelector('#data').value;
+		document.querySelector('#dataResult').innerText = data;
+	})
+	//godzina
+	showResults.addEventListener('click', () => {
+		const timePickUp = document.querySelector('#timePickUp').value;
+		document.querySelector('#timePickUpResult').innerText = timePickUp;
+	})
+	//uwagi dla kuriera
+	showResults.addEventListener('click', () => {
+		const moreInfo = document.querySelector('#moreInfo').value;
+		document.querySelector('#moreInfoResult').innerText = moreInfo;
+	})
+
+
 });

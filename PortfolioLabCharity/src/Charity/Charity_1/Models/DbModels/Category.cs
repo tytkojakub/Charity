@@ -11,8 +11,5 @@ namespace Charity.Models.DbModels
         public int CategoryId { get; set; }
         [Required]
         public string CategoryName { get; set; }
-        public string CategoryDescription { get; set; }
-        public bool IsChecked { get; set; }
-
     }
 }
