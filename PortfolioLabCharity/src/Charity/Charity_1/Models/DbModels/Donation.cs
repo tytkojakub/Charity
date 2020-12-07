@@ -9,7 +9,7 @@ namespace Charity.Models.DbModels
     {
         public int DonationId { get; set; }
         public int DonationQuantity { get; set; }
-        public List<Category> Categories { get; set; }
+        public IList<Category> Categories { get; set; }
         public Institution Institution { get; set; }
         public string Street { get; set; }
         public string City { get; set; }

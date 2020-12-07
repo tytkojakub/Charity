@@ -180,6 +180,7 @@
 	})
 	//fundacja
 
+	})
 	// ulica
 	showResults.addEventListener('click', () => {
 		const street = document.querySelector('#street').value;

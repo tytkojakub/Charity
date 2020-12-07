@@ -43,11 +43,12 @@ namespace Charity.Mvc.Controllers
         {
             try
             {//mapowanie modelu
-                List <Category> listCategories = new List<Category>();
+                IList<Category> listCategories = new List<Category>();
                 foreach (var item in model.Categories)
                 {
                     listCategories.Add(categoryService.Get(int.Parse(item)));
                 };
+
                 Donation donation = new Donation()
                 {
                     DonationQuantity = model.Bags,
@@ -56,13 +57,14 @@ namespace Charity.Mvc.Controllers
                     Street = model.Street,
                     City = model.City,
                     ZipCode = int.Parse(model.PostCode),
-                    PickUpTime = DateTime.Parse(model.Data + model.Time),
-                    PickUpComment = model.MoreInfo,
+                    PickUpTime = DateTime.Parse(model.Data + " " + model.Time),
+                    PickUpComment = model.MoreInfo
                 };
                 donationService.Create(donation);
             }
-            catch
+            catch(Exception e)
             {
+
                 return View();
             }
             return View("../Donate/confirmation");
