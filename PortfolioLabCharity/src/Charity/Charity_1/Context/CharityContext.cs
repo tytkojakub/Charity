@@ -16,6 +16,7 @@ namespace Charity.Context
         public DbSet<Category> Categories { get; set; }
         public DbSet<Institution> Institutions { get; set; }
         public DbSet<Donation> Donations { get; set; }
+        public new DbSet<AspNetUser> Users { get; set; }
 
     }
 }

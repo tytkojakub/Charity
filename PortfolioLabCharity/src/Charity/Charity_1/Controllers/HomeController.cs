@@ -25,14 +25,17 @@ namespace Charity_1.Controllers
 
 		public IActionResult Index()
 		{
-
-			var list = institutionService.GetAll();
-			HomeViewModel model = new HomeViewModel()
+			HomeViewModel model = null;
+			try
 			{
-				Sum = donationService.Sum(), 
-				Quantity = institutionService.InstitutionCount(),
-				List = list
-			};
+				model = new HomeViewModel()
+				{
+					Sum = donationService.Sum(),
+					Quantity = institutionService.InstitutionCount(),
+					List = institutionService.GetAll()
+				};
+			}
+			catch (Exception x){}
 			return View(model);
 		}
 
