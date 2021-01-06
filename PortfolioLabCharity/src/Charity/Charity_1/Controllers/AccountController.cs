@@ -32,7 +32,7 @@ namespace Charity.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<ActionResult> Registration(RegistrationViewModel model)
+        public async Task<ActionResult> Registration([FromBody]RegistrationViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -54,7 +54,7 @@ namespace Charity.Controllers
                 try
                 {
                     var createUserResult = await _userManager.CreateAsync(user, model.Password);
-                    if (createUserResult.Succeeded) // tu jest FALSE - dlaczego :(
+                    if (createUserResult.Succeeded)
                     {
                         return RedirectToAction("Login", "Account");
                     }

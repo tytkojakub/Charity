@@ -64,7 +64,8 @@ namespace Charity.Mvc.Controllers
                     City = model.City,
                     ZipCode = int.Parse(model.PostCode),
                     PickUpTime = DateTime.Parse(model.Data + " " + model.Time),
-                    PickUpComment = model.MoreInfo
+                    PickUpComment = model.MoreInfo,
+                    PhoneNumber = model.Phone               
                 };
                 donationService.Create(donation);
             }

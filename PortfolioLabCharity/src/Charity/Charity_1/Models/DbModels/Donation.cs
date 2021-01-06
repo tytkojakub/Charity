@@ -16,5 +16,6 @@ namespace Charity.Models.DbModels
         public int ZipCode { get; set; }
         public DateTime PickUpTime { get; set; }
         public string PickUpComment { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }
