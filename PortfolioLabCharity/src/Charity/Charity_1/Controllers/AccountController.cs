@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Charity.Models.DbModels;
 using Charity.Models.ViewModels;
+using Charity.Services;
 using Charity.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -71,6 +73,44 @@ namespace Charity.Controllers
                 }
             }
             return View(model);
+        }
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = _userManagerService.GetUserByEmail(model.Email);
+            if (user == null)
+            {
+                TempData["warning_email"] = "Nie odnaleziono adresu e-mail";
+                return View(model);
+            }
+
+            await _signInManager.SignOutAsync();
+            var login = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
+            if (login.Succeeded)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
+
+            TempData["warning_password"] = "Podano nieprawidowe hasło";
+            return View(model);
+        }
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }
