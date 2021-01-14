@@ -75,14 +75,14 @@ namespace Charity.Controllers
             return View(model);
         }
         [HttpGet]
-        public IActionResult Login()
+        public ActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<ActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
             {
