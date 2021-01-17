@@ -1,45 +1,25 @@
 ﻿@model Charity.Models.ViewModels.RegistrationViewModel
+<header>
+    @Html.Partial("_PartialHeadNavi")
+</header>
 
+<section class="login-page">
+    <h2>Załóż konto</h2>
+    <form asp-action="Registration">
+        <div class="form-group">
+            <input asp-for="Email" type="email" name="email" placeholder="Email" />
+        </div>
+        <div class="form-group">
+            <input asp-for="Password" type="password" name="password" placeholder="Hasło" />
+        </div>
+        <div class="form-group">
+            <input asp-for="Password2" type="password" name="password2" placeholder="Powtórz hasło" />
+        </div>
 
-    <header class="header--main-page">
-        @Html.Partial("_PartialHeadNavi")
-    </header>
-
-
-    <section class="login-page">
-        <h2>Załóż konto</h2>
-        <form asp-action="Registration">
-            <div class="form-group">
-                <input asp-for="Email" type="email" name="email" placeholder="Email" />
-            </div>
-            <div class="form-group">
-                <input asp-for="Password" type="password" name="password" placeholder="Hasło" />
-            </div>
-            <div class="form-group">
-                <input asp-for="Password2" type="password" name="password2" placeholder="Powtórz hasło" />
-            </div>
-
-            <div class="form-group form-group--buttons">
-                <a asp-controller="Account" asp-action="Login" class="btn btn--without-border">Zaloguj się</a>
-                <button class="btn" type="submit">Załóż konto</button>
-            </div>
-        </form>
-    </section>
-
-    @Html.Partial("_PartialPageFooter")
-
-    <environment include="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        <script src="~/js/site.js" asp-append-version="true"></script>
-    </environment>
-    <environment exclude="Development">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
-        </script>
-        <script src="~/js/site.min.js" asp-append-version="true"></script>
-    </environment>
-
-
+        <div class="form-group form-group--buttons">
+            <a asp-controller="Account" asp-action="Login" class="btn btn--without-border">Zaloguj się</a>
+            <button class="btn" type="submit">Załóż konto</button>
+        </div>
+    </form>
+</section>
+@Html.Partial("_PartialPageFooter")

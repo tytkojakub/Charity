@@ -8,5 +8,7 @@ namespace Charity.Models.DbModels
 {
     public sealed class AspNetUser : IdentityUser
     {
+        //Relationships
+        public ICollection<Donation> Donations { get; set; }
     }
 }

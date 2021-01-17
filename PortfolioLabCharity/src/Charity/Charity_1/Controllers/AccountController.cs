@@ -31,10 +31,11 @@ namespace Charity.Controllers
         [HttpGet]
         public ActionResult Registration()
         {
+            ViewBag.Title = "Rejestracja";
             return View();
         }
         [HttpPost]
-        public async Task<ActionResult> Registration([FromBody]RegistrationViewModel model)
+        public async Task<ActionResult> Registration([FromForm]RegistrationViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -77,6 +78,7 @@ namespace Charity.Controllers
         [HttpGet]
         public ActionResult Login()
         {
+            ViewBag.Title = "Strona logowania";
             return View();
         }
 

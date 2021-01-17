@@ -25,6 +25,7 @@ namespace Charity_1.Controllers
 
 		public IActionResult Index()
 		{
+			ViewBag.Title = "Strona główna";
 			HomeViewModel model = null;
 			try
 			{

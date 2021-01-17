@@ -27,6 +27,7 @@ namespace Charity.Mvc.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Title = "Przekaż dary";
             try
             {
                 var list = categoryService.GetAll();
@@ -47,6 +48,7 @@ namespace Charity.Mvc.Controllers
         [HttpPost] //do zapisywania danych z formularza.
         public IActionResult Index([FromForm] DonationPostViewModel model)
         {
+            ViewBag.Title = "Przekazano dary";
             try
             {//mapowanie modelu
                 IList<Category> listCategories = new List<Category>();
@@ -62,7 +64,7 @@ namespace Charity.Mvc.Controllers
                     Institution = institutionService.Get(int.Parse(model.Organization)), 
                     Street = model.Street,
                     City = model.City,
-                    ZipCode = int.Parse(model.PostCode),
+                    ZipCode = model.PostCode,
                     PickUpTime = DateTime.Parse(model.Data + " " + model.Time),
                     PickUpComment = model.MoreInfo,
                     PhoneNumber = model.Phone               

@@ -8,10 +8,14 @@ namespace Charity.Models.DbModels
 {
     public class Institution
     {
-        [Required]
+        [Key]
         public int InstitutionId { get; set; }
-        [Required]
+        [StringLength(150)]
         public string InstitutionTitle { get; set; }
+        [StringLength(500)]
         public string Description { get; set; }
+
+        //Relationships
+        public ICollection<Donation> Donations { get; set; }
     }
 }
