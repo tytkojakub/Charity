@@ -1,0 +1,28 @@
+﻿@using Charity.Mvc.Controllers
+@using Charity.Models.DbModels
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<AspNetUser> Manager
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+    <ul class="nav--actions">
+        <li class="logged-user">
+            Witaj @Manager.FindByIdAsync(User.Claims.FirstOrDefault(a=>a.Type.Contains("nameindentifier"))?.Value).Result.UserName!
+
+            <ul class="dropdown">
+                <li><a href="#">Profil</a></li>
+                <li><a href="#">Ustawienia</a></li>
+                <li><a href="#">Moje zbiórki</a></li>
+                <li><a href="#">Wyloguj</a></li>
+            </ul>
+        </li>
+    </ul>
+    }
+    else
+    {
+    <ul class="nav--actions">
+        <li><a asp-controller="Account" asp-action="Login" class="btn btn--small btn--without-border">Zaloguj</a></li>
+        <li><a asp-controller="Account" asp-action="Registration" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+    </ul>
+    }
+}

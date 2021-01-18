@@ -52,7 +52,6 @@ namespace Charity_1
             services.AddScoped<UserManager<AspNetUser>>();
             services.AddScoped<SignInManager<AspNetUser>>();
 
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
