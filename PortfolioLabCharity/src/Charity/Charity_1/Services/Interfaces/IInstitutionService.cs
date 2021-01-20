@@ -9,10 +9,10 @@ namespace Charity.Services.Interfaces
     public interface IInstitutionService
     {
         bool Create(Institution institution);
-        Institution Get(int id);
+        Institution Get(string id);
         IList<Institution> GetAll();
         bool Update(Institution institution);
-        bool Delete(int id);
+        bool Delete(string id);
         int InstitutionCount();
     }
 }

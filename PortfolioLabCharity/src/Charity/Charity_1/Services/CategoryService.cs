@@ -27,7 +27,7 @@ namespace Charity.Services
             return _context.SaveChanges() > 0;
         }
 
-        public bool Delete(int id)
+        public bool Delete(string id)
         {
             var category = _context.Categories.SingleOrDefault(b => b.CategoryId == id);
             if (category == null)
@@ -37,7 +37,7 @@ namespace Charity.Services
             return _context.SaveChanges() > 0;
         }
 
-        public Category Get(int id)
+        public Category Get(string id)
         {
             return _context.Categories.SingleOrDefault(b => b.CategoryId == id);
         }
