@@ -9,7 +9,7 @@ namespace Charity.Models.DbModels
     public class Donation
     {
         [Key]
-        public int DonationId { get; set; }
+        public string DonationId { get; set; }
         public int DonationQuantity { get; set; }
         [StringLength(150)]
         public string Street { get; set; }

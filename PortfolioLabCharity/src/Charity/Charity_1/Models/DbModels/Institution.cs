@@ -9,7 +9,7 @@ namespace Charity.Models.DbModels
     public class Institution
     {
         [Key]
-        public int InstitutionId { get; set; }
+        public string InstitutionId { get; set; }
         [StringLength(150)]
         public string InstitutionTitle { get; set; }
         [StringLength(500)]
