@@ -54,14 +54,14 @@ namespace Charity.Mvc.Controllers
                 IList<Category> listCategories = new List<Category>();
                 foreach (var item in model.Categories)
                 {
-                    listCategories.Add(categoryService.Get(int.Parse(item)));
+                    listCategories.Add(categoryService.Get(item));
                 };
 
                 Donation donation = new Donation()
                 {
                     DonationQuantity = model.Bags,
                     Categories = listCategories,
-                    Institution = institutionService.Get(int.Parse(model.Organization)), 
+                    Institution = institutionService.Get(model.Organization), 
                     Street = model.Street,
                     City = model.City,
                     ZipCode = model.PostCode,
