@@ -9,10 +9,10 @@ namespace Charity.Services.Interfaces
     public interface IDonationService
     {
         bool Create(Donation donation);
-        Donation Get(int id);
+        Donation Get(string id);
         IList<Donation> GetAll();
         bool Update(Donation donation);
-        bool Delete(int id);
+        bool Delete(string id);
         int Sum();
     }
 }

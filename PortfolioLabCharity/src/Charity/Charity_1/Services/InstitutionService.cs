@@ -27,7 +27,7 @@ namespace Charity.Services
             return _context.SaveChanges() > 0;
         }
 
-        public bool Delete(int id)
+        public bool Delete(string id)
         {
             var institution = _context.Institutions.SingleOrDefault(b => b.InstitutionId == id);
             if (institution == null)
@@ -37,7 +37,7 @@ namespace Charity.Services
             return _context.SaveChanges() > 0;
         }
 
-        public Institution Get(int id)
+        public Institution Get(string id)
         {
             return _context.Institutions.SingleOrDefault(b => b.InstitutionId == id);
         }
