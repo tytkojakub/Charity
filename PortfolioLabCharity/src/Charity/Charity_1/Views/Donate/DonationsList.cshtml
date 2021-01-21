@@ -1,0 +1,53 @@
+﻿@model IEnumerable<Charity.Models.DbModels.Donation>
+@Html.Partial("_PartialDonateHead")
+<body>
+    <header class="header--form-page">
+        @Html.Partial("_PartialHeadNavi")
+    </header>
+    <table style="font-size: 1.5rem;" class="col table-bordered table-info">
+        <thead>
+            <tr>
+                <th>
+                    Data odbioru
+                </th>
+                <th>
+                    Worki
+                </th>
+                <th>
+                    Dla
+                </th>
+                <th>
+                    Kategoria darów
+                </th>
+                <th>
+                    Komentarz
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var donation in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => donation.PickUpTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => donation.DonationQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => donation.Institution.InstitutionTitle)
+                    </td>
+                    <td>
+                        @foreach (var categoryDonation in donation.DonationCategory.Where(cd => cd.DonationId == donation.DonationId).ToList())
+                        {
+                            <p>@categoryDonation.Category.Name</p>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => donation.PickUpComment)
+                    </td>
+                </tr>}
+        </tbody>
+    </table>
+
+</body>
