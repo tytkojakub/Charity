@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Charity.Models.DbModels;
 using Charity.Models.ViewModels;
 using Charity.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static Charity.Models.ViewModels.DonationViewModel;
@@ -78,6 +81,13 @@ namespace Charity.Mvc.Controllers
             return View("../Donate/confirmation");
 
 
+        }
+        [Authorize]
+        public IActionResult DonationsList()
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var model = donationService.GetDonations(userId);
+            return View(model);
         }
 
         
