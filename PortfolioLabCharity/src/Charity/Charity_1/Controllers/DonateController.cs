@@ -85,9 +85,11 @@ namespace Charity.Mvc.Controllers
         [Authorize]
         public IActionResult DonationsList()
         {
+            ViewBag.Title = "Lista darów";
+
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var model = donationService.GetDonations(userId);
-            return View(model);
+            var donation = donationService.GetDonations(userId);
+            return View(donation);
         }
 
         
