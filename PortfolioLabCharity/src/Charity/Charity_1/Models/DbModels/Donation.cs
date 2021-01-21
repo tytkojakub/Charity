@@ -24,7 +24,7 @@ namespace Charity.Models.DbModels
         public string PhoneNumber { get; set; }
         
         //Relationship
-        public ICollection<Category> Categories { get; set; }
+        public ICollection<DonationCategory> DonationCategory { get; set; }
         public AspNetUser User { get; set; }
         public Institution Institution { get; set; }
     }

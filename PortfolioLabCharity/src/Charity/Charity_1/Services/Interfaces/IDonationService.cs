@@ -14,5 +14,9 @@ namespace Charity.Services.Interfaces
         bool Update(Donation donation);
         bool Delete(string id);
         int Sum();
+        IList<Donation> GetDonations(string id);
+
+
+
     }
 }

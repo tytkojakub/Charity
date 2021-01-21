@@ -1,6 +1,7 @@
 ﻿using Charity.Context;
 using Charity.Models.DbModels;
 using Charity.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,9 +55,17 @@ namespace Charity.Services
         }
         public int Sum()
         {
-            var quantity = _context.Donations.Select(d => d.DonationQuantity).Sum();
-            return quantity;
+            return _context.Donations.Select(d => d.DonationQuantity).Sum();
         }
-
+        public IList<Donation> GetDonations(string id)
+        {
+            var donations = _context.Donations
+                .Where(d => d.User.Id == id)
+                .OrderByDescending(d => d.PickUpTime)
+                .Include(d => d.DonationCategory)
+                    .ThenInclude(e => e.Category)
+                .Include(d => d.Institution);
+            return donations.ToList();
+        }
     }
 }
