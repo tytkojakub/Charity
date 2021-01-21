@@ -14,6 +14,6 @@ namespace Charity.Models.DbModels
         public string CategoryName { get; set; }
 
         //Relationships
-        public ICollection<Donation> Donations { get; set; }
+        public ICollection<DonationCategory> DonationCategory { get; set; }
     }
 }
