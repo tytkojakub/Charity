@@ -13,9 +13,11 @@ namespace Charity.Models.DbModels
         public string Id { get; set; }
         public string DonationId { get; set; }
         public string CategoryId { get; set; }
+
         //Relationships
         [ForeignKey("DonationId")]
         public Donation Donation { get; set; }
+
         [ForeignKey("CategoryId")]
         public Category Category { get; set; }
     }

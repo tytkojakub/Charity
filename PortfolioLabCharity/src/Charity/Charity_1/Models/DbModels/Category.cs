@@ -10,6 +10,7 @@ namespace Charity.Models.DbModels
     {
         [Key]
         public string CategoryId { get; set; }
+
         [StringLength(100)]
         public string CategoryName { get; set; }
 

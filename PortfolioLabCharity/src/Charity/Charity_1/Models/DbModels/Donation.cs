@@ -10,22 +10,32 @@ namespace Charity.Models.DbModels
     {
         [Key]
         public string DonationId { get; set; }
+
         public int DonationQuantity { get; set; }
+
         [StringLength(150)]
         public string Street { get; set; }
+
         [StringLength(50)]
         public string City { get; set; }
+
         [StringLength(10)]
         public string ZipCode { get; set; }
+
         public DateTime PickUpTime { get; set; }
+
         [StringLength(500)]
         public string PickUpComment { get; set; }
+
         [StringLength(50)]
         public string PhoneNumber { get; set; }
         
         //Relationship
         public ICollection<DonationCategory> DonationCategory { get; set; }
+        
         public AspNetUser User { get; set; }
+
+        [Required]
         public Institution Institution { get; set; }
     }
 }

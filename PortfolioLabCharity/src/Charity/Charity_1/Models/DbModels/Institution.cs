@@ -10,8 +10,10 @@ namespace Charity.Models.DbModels
     {
         [Key]
         public string InstitutionId { get; set; }
+
         [StringLength(150)]
         public string InstitutionTitle { get; set; }
+
         [StringLength(500)]
         public string Description { get; set; }
 
