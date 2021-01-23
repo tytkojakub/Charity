@@ -40,7 +40,7 @@
                     <td>
                         @foreach (var categoryDonation in donation.DonationCategory.Where(cd => cd.DonationId == donation.DonationId).ToList())
                         {
-                            <p>@categoryDonation.Category.Name</p>
+                            <p>@categoryDonation.Category.CategoryName</p>
                         }
                     </td>
                     <td>
