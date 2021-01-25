@@ -20,26 +20,37 @@ namespace Charity.Mvc.Controllers
         private readonly IDonationService donationService;
         private readonly IInstitutionService institutionService;
         private readonly ICategoryService categoryService;
-        public DonateController(IDonationService donationService, IInstitutionService institutionService, ICategoryService categoryService)
+        private readonly UserManager<AspNetUser> userManager;
+        public DonateController(IDonationService donationService, IInstitutionService institutionService, ICategoryService categoryService, UserManager<AspNetUser> userManager)
         {
             this.donationService = donationService;
             this.institutionService = institutionService;
             this.categoryService = categoryService;
+            this.userManager = userManager;
         }
         #endregion
+
 
         public IActionResult Index()
         {
             ViewBag.Title = "Przekaż dary";
             try
             {
-                var list = categoryService.GetAll();
-                var list2 = institutionService.GetAll();
+                var listCategory = categoryService.GetAll();
+                var listInstitution = institutionService.GetAll();
                 DonationViewModel model = new DonationViewModel()
                 {
-                    CategoriesList = list,
-                    InstitutionsList = list2
                 };
+                model.CategoriesList = new List<CategoryViewModel>();
+                foreach(var item in listCategory)
+                {
+                    model.CategoriesList.Add(new CategoryViewModel() { CategoryId = item.CategoryId, CategoryName = item.CategoryName});
+                }
+                model.InstitutionsList = new List<InstitutionViewModel>();
+                foreach(var item in listInstitution)
+                {
+                    model.InstitutionsList.Add(new InstitutionViewModel() { InstitutionId = item.InstitutionId, InstitutionTitle = item.InstitutionTitle, Description = item.Description});
+                }
                 return View(model);
             }
             catch (Exception e) 
@@ -49,38 +60,33 @@ namespace Charity.Mvc.Controllers
 
         }
         [HttpPost] //do zapisywania danych z formularza.
-        public IActionResult Index([FromForm] DonationPostViewModel model)
+        public IActionResult Index([FromForm] DonationViewModel model)
         {
             ViewBag.Title = "Przekazano dary";
             try
-            {//mapowanie modelu
-                IList<Category> listCategories = new List<Category>();
-                foreach (var item in model.Categories)
+            {
+                var list = new List<string>();
+                foreach (var item in model.CategoriesList)
                 {
-                    listCategories.Add(categoryService.Get(item));
-                };
-
-                Donation donation = new Donation()
+                    if (item.IsChecked == true)
+                    {
+                        list.Add(item.CategoryId);
+                    }
+                }
+                if (User.Identity.IsAuthenticated)
                 {
-                    DonationQuantity = model.Bags,
-                    Categories = listCategories,
-                    Institution = institutionService.Get(model.Organization), 
-                    Street = model.Street,
-                    City = model.City,
-                    ZipCode = model.PostCode,
-                    PickUpTime = DateTime.Parse(model.Data + " " + model.Time),
-                    PickUpComment = model.MoreInfo,
-                    PhoneNumber = model.Phone               
-                };
-                donationService.Create(donation);
+                    string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    model.User = userManager.FindByIdAsync(userId).Result;
+                }
+                model.Donation.Institution = institutionService.Get(model.InstitutionId.ToString());
+                model.Donation.PickUpTime = model.PickUpDateOn.AddHours(model.PickUpTimeOn.Hour).AddMinutes(model.PickUpTimeOn.Hour);
+                donationService.Create(model.Donation, list);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return View();
             }
-            return View("../Donate/confirmation");
-
-
+            return   View("confirmation");
         }
         [Authorize]
         public IActionResult DonationsList()

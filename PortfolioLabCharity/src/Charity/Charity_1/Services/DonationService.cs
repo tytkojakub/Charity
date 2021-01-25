@@ -22,9 +22,17 @@ namespace Charity.Services
 
 
 
-        public bool Create(Donation donation)
+        public bool Create(Donation donation, List<string> categoriesId)
         {
+            donation.DonationId = Guid.NewGuid().ToString();
             _context.Donations.Add(donation);
+            _context.SaveChanges();
+            var donationsCategory = new List<DonationCategory>();
+            foreach (var item in categoriesId)
+            {
+                donationsCategory.Add(new DonationCategory() {CategoryId = item, DonationId = donation.DonationId, Id = Guid.NewGuid().ToString()} );
+            }
+            _context.AddRange(donationsCategory);
             return _context.SaveChanges() > 0;
         }
 

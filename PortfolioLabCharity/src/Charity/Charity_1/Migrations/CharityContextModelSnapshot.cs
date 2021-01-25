@@ -19,27 +19,10 @@ namespace Charity.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.0");
 
-            modelBuilder.Entity("CategoryDonation", b =>
-                {
-                    b.Property<int>("CategoriesCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("DonationsDonationId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CategoriesCategoryId", "DonationsDonationId");
-
-                    b.HasIndex("DonationsDonationId");
-
-                    b.ToTable("CategoryDonation");
-                });
-
             modelBuilder.Entity("Charity.Models.DbModels.Category", b =>
                 {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                    b.Property<string>("CategoryId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CategoryName")
                         .HasMaxLength(100)
@@ -52,10 +35,8 @@ namespace Charity.Migrations
 
             modelBuilder.Entity("Charity.Models.DbModels.Donation", b =>
                 {
-                    b.Property<int>("DonationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                    b.Property<string>("DonationId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("City")
                         .HasMaxLength(50)
@@ -64,8 +45,9 @@ namespace Charity.Migrations
                     b.Property<int>("DonationQuantity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("InstitutionId")
-                        .HasColumnType("int");
+                    b.Property<string>("InstitutionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("PhoneNumber")
                         .HasMaxLength(50)
@@ -98,12 +80,30 @@ namespace Charity.Migrations
                     b.ToTable("Donations");
                 });
 
+            modelBuilder.Entity("Charity.Models.DbModels.DonationCategory", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategoryId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("DonationId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("DonationId");
+
+                    b.ToTable("DonationCategory");
+                });
+
             modelBuilder.Entity("Charity.Models.DbModels.Institution", b =>
                 {
-                    b.Property<int>("InstitutionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                    b.Property<string>("InstitutionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(500)
@@ -327,26 +327,13 @@ namespace Charity.Migrations
                     b.HasDiscriminator().HasValue("AspNetUser");
                 });
 
-            modelBuilder.Entity("CategoryDonation", b =>
-                {
-                    b.HasOne("Charity.Models.DbModels.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Charity.Models.DbModels.Donation", null)
-                        .WithMany()
-                        .HasForeignKey("DonationsDonationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Charity.Models.DbModels.Donation", b =>
                 {
                     b.HasOne("Charity.Models.DbModels.Institution", "Institution")
                         .WithMany("Donations")
-                        .HasForeignKey("InstitutionId");
+                        .HasForeignKey("InstitutionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Charity.Models.DbModels.AspNetUser", "User")
                         .WithMany("Donations")
@@ -355,6 +342,21 @@ namespace Charity.Migrations
                     b.Navigation("Institution");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Charity.Models.DbModels.DonationCategory", b =>
+                {
+                    b.HasOne("Charity.Models.DbModels.Category", "Category")
+                        .WithMany("DonationCategory")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Charity.Models.DbModels.Donation", "Donation")
+                        .WithMany("DonationCategory")
+                        .HasForeignKey("DonationId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Donation");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -406,6 +408,16 @@ namespace Charity.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Charity.Models.DbModels.Category", b =>
+                {
+                    b.Navigation("DonationCategory");
+                });
+
+            modelBuilder.Entity("Charity.Models.DbModels.Donation", b =>
+                {
+                    b.Navigation("DonationCategory");
                 });
 
             modelBuilder.Entity("Charity.Models.DbModels.Institution", b =>

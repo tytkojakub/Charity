@@ -8,7 +8,7 @@ namespace Charity.Services.Interfaces
 {
     public interface IDonationService
     {
-        bool Create(Donation donation);
+        bool Create(Donation donation, List<string> categoriesId);
         Donation Get(string id);
         IList<Donation> GetAll();
         bool Update(Donation donation);

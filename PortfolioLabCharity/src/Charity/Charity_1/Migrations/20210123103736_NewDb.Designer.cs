@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Charity.Migrations
 {
     [DbContext(typeof(CharityContext))]
-    [Migration("20201210182344_User")]
-    partial class User
+    [Migration("20210123103736_NewDb")]
+    partial class NewDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,73 +23,97 @@ namespace Charity.Migrations
 
             modelBuilder.Entity("Charity.Models.DbModels.Category", b =>
                 {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                    b.Property<string>("CategoryId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("DonationId")
-                        .HasColumnType("int");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("CategoryId");
-
-                    b.HasIndex("DonationId");
 
                     b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Charity.Models.DbModels.Donation", b =>
                 {
-                    b.Property<int>("DonationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                    b.Property<string>("DonationId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("DonationQuantity")
                         .HasColumnType("int");
 
-                    b.Property<int?>("InstitutionId")
-                        .HasColumnType("int");
+                    b.Property<string>("InstitutionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("PickUpComment")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<DateTime>("PickUpTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Street")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
-                    b.Property<int>("ZipCode")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ZipCode")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("DonationId");
 
                     b.HasIndex("InstitutionId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Donations");
+                });
+
+            modelBuilder.Entity("Charity.Models.DbModels.DonationCategory", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CategoryId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("DonationId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("DonationId");
+
+                    b.ToTable("DonationCategory");
                 });
 
             modelBuilder.Entity("Charity.Models.DbModels.Institution", b =>
                 {
-                    b.Property<int>("InstitutionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                    b.Property<string>("InstitutionId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("InstitutionTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("InstitutionId");
 
@@ -305,20 +329,36 @@ namespace Charity.Migrations
                     b.HasDiscriminator().HasValue("AspNetUser");
                 });
 
-            modelBuilder.Entity("Charity.Models.DbModels.Category", b =>
-                {
-                    b.HasOne("Charity.Models.DbModels.Donation", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("DonationId");
-                });
-
             modelBuilder.Entity("Charity.Models.DbModels.Donation", b =>
                 {
                     b.HasOne("Charity.Models.DbModels.Institution", "Institution")
-                        .WithMany()
-                        .HasForeignKey("InstitutionId");
+                        .WithMany("Donations")
+                        .HasForeignKey("InstitutionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Charity.Models.DbModels.AspNetUser", "User")
+                        .WithMany("Donations")
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Institution");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Charity.Models.DbModels.DonationCategory", b =>
+                {
+                    b.HasOne("Charity.Models.DbModels.Category", "Category")
+                        .WithMany("DonationCategory")
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("Charity.Models.DbModels.Donation", "Donation")
+                        .WithMany("DonationCategory")
+                        .HasForeignKey("DonationId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Donation");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -372,9 +412,24 @@ namespace Charity.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Charity.Models.DbModels.Category", b =>
+                {
+                    b.Navigation("DonationCategory");
+                });
+
             modelBuilder.Entity("Charity.Models.DbModels.Donation", b =>
                 {
-                    b.Navigation("Categories");
+                    b.Navigation("DonationCategory");
+                });
+
+            modelBuilder.Entity("Charity.Models.DbModels.Institution", b =>
+                {
+                    b.Navigation("Donations");
+                });
+
+            modelBuilder.Entity("Charity.Models.DbModels.AspNetUser", b =>
+                {
+                    b.Navigation("Donations");
                 });
 #pragma warning restore 612, 618
         }

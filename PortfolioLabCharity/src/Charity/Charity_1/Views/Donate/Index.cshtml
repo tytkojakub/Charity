@@ -62,18 +62,17 @@
                 <div data-step="1" class="active">
                     <h3>Zaznacz co chcesz oddać:</h3>
 
-                    @foreach (var item in Model.CategoriesList)
+                    @for (var i =0; i< Model.CategoriesList.Count;i++)
                     {
                         <div class="form-group form-group--checkbox">
                             <label>
-                                <input type="checkbox"
-                                       name="categories"
-                                       value="@item.CategoryId"
-                                       />
+                                <input asp-for=CategoriesList[i].CategoryName type="hidden" value=@Model.CategoriesList[i].CategoryName />
+                                <input asp-for=CategoriesList[i].CategoryId type="hidden" value=@Model.CategoriesList[i].CategoryId />
+                                <input asp-for=CategoriesList[i].IsChecked type="checkbox" />
                                 <span class="checkbox"></span>
-                                <span class="description">@item.CategoryName</span>
-                            </label>
-                        </div>
+                                <span class="description">@Model.CategoriesList[i].CategoryName</span>
+                            </label> 
+                        </div> 
                     }
 
 
@@ -88,8 +87,9 @@
 
                     <div class="form-group form-group--inline">
                         <label>
-                            Liczba 60l worków: 
-                            <input asp-for="donation.DonationQuantity" type="number" name="bags" step="1" min="1" id="bags" />
+                            Liczba 60l worków:
+                            <input asp-for="Donation.DonationQuantity" class="form-control" />
+                            <span asp-validation-for="Donation.DonationQuantity" class="text-danger"></span>
                         </label>
                     </div>
 
@@ -106,19 +106,19 @@
                     <h3>Wybierz organizację, której chcesz pomóc:</h3>
                     @foreach (var item in Model.InstitutionsList)
                     {
-                        <div class="form-group form-group--checkbox">
-                            <label>
-                                <input type="radio" name="organization" value="@item.InstitutionId" />
-                                <span class="checkbox radio"></span>
-                                <span class="description">
-                                    <div class="title">@item.InstitutionTitle</div>
-                                    <div class="subtitle">
-                                        @item.Description
-                                    </div>
-
-                                </span>
-                            </label>
-                        </div>
+                <div class="form-group form-group--checkbox">
+                    <label>
+                        <input asp-for="@item.InstitutionTitle" type="hidden" value="@item.InstitutionTitle" />
+                        <input asp-for="@item.Description" type="hidden" value="@item.Description" />
+                        <input asp-for="@item.InstitutionId" type="hidden" value="@item.InstitutionId" />
+                        @Html.RadioButtonFor(m => m.InstitutionId, @item.InstitutionId)
+                        <span class="checkbox radio"></span>
+                        <span class="description">
+                            <div class="title">@item.InstitutionTitle</div>
+                            <div class="subtitle">@item.Description</div>
+                        </span>
+                    </label>
+                </div>
                     }
 
                     <div class="form-group form-group--buttons">
@@ -135,39 +135,41 @@
                         <div class="form-section--column">
                             <h4>Adres odbioru</h4>
                             <div class="form-group form-group--inline">
-                                <label> Ulica <input asp-for="donation.Street" type="text" name="street" id="street"/> </label>
+                                <label> Ulica <input asp-for="Donation.Street" type="text" id="street" /> </label>
+                                <span asp-validation-for="Donation.Street" class="text-danger"></span>
                             </div>
 
                             <div class="form-group form-group--inline">
-                                <label> Miasto <input asp-for="donation.City" type="text" name="city" id="city"/> </label>
+                                <label> Miasto <input asp-for="Donation.City" type="text" id="city" /> </label>
+                                <span asp-validation-for="Donation.City" class="text-danger"></span>
                             </div>
 
                             <div class="form-group form-group--inline">
-                                <label>
-                                    Kod pocztowy <input asp-for="donation.ZipCode" type="text" name="postcode" id="postcode"/>
-                                </label>
+                                <label>Kod pocztowy <input asp-for="Donation.ZipCode" type="text" id="postcode" /></label>
+                                <span asp-validation-for="Donation.ZipCode" class="text-danger"></span>
                             </div>
 
                             <div class="form-group form-group--inline">
-                                <label>
-                                    Numer telefonu <input asp-for="donation.PhoneNumber" type="number" name="phone" id="phone" />
-                                </label>
+                                <label> Numer telefonu <input asp-for="Donation.PhoneNumber" type="number" id="phone" /></label>
+                                <span asp-validation-for="Donation.PhoneNumber" class="text-danger"></span>
                             </div>
                         </div>
 
                         <div class="form-section--column">
                             <h4>Termin odbioru</h4>
                             <div class="form-group form-group--inline">
-                                <label> Data <input asp-for="donation.PickUpTime" type="date" name="data" id="data"/> </label>
+                                <label> Data <input asp-for="PickUpDateOn" type="date" id="data" /> </label>
+                                <span asp-validation-for="PickUpDateOn" class="text-danger"></span>
                             </div>
                             <div class="form-group form-group--inline">
-                                <label> Godzina <input type="time" name="time" id="timePickUp" /> </label>
+                                <label> Godzina <input asp-for="PickUpTimeOn" type="time" id="timePickUp"/> </label>
+                                <span asp-validation-for="PickUpTimeOn" class="text-danger"></span>
                             </div>
 
                             <div class="form-group form-group--inline">
                                 <label>
                                     Uwagi dla kuriera
-                                    <textarea asp-for="donation.PickUpComment" name="moreInfo" rows="5" id="moreInfo"></textarea>
+                                    <textarea asp-for="Donation.PickUpComment" name="moreInfo" rows="5" id="moreInfo"></textarea>
                                 </label>
                             </div>
                         </div>

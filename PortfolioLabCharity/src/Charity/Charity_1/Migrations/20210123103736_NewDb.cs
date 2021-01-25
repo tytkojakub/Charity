@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Charity.Migrations
 {
-    public partial class Migracja : Migration
+    public partial class NewDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -26,6 +26,7 @@ namespace Charity.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -47,13 +48,24 @@ namespace Charity.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CategoryName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Institutions",
                 columns: table => new
                 {
-                    InstitutionId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    InstitutionTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    InstitutionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    InstitutionTitle = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -170,42 +182,53 @@ namespace Charity.Migrations
                 name: "Donations",
                 columns: table => new
                 {
-                    DonationId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DonationId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DonationQuantity = table.Column<int>(type: "int", nullable: false),
-                    InstitutionId = table.Column<int>(type: "int", nullable: true),
-                    Street = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ZipCode = table.Column<int>(type: "int", nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    ZipCode = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     PickUpTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PickUpComment = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    PickUpComment = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    InstitutionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Donations", x => x.DonationId);
                     table.ForeignKey(
+                        name: "FK_Donations_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Donations_Institutions_InstitutionId",
                         column: x => x.InstitutionId,
                         principalTable: "Institutions",
                         principalColumn: "InstitutionId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Categories",
+                name: "DonationCategory",
                 columns: table => new
                 {
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryDescription = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DonationId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DonationId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CategoryId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                    table.PrimaryKey("PK_DonationCategory", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Categories_Donations_DonationId",
+                        name: "FK_DonationCategory_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_DonationCategory_Donations_DonationId",
                         column: x => x.DonationId,
                         principalTable: "Donations",
                         principalColumn: "DonationId",
@@ -252,14 +275,24 @@ namespace Charity.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Categories_DonationId",
-                table: "Categories",
+                name: "IX_DonationCategory_CategoryId",
+                table: "DonationCategory",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DonationCategory_DonationId",
+                table: "DonationCategory",
                 column: "DonationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Donations_InstitutionId",
                 table: "Donations",
                 column: "InstitutionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Donations_UserId",
+                table: "Donations",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -280,16 +313,19 @@ namespace Charity.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "DonationCategory");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Categories");
 
             migrationBuilder.DropTable(
                 name: "Donations");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "Institutions");
