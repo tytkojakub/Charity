@@ -11,11 +11,13 @@ namespace Charity.Models.ViewModels
         [Required]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="uzupełnij pole")]
+        [Display(Prompt ="podaj hasło")]
         public string Password { get; set; }
 
-        [Required]
+        [Required(ErrorMessage ="uzupełnij pole")]
         [Compare("Password")]
+        [Display(Prompt = "powtórz hasło")]
         public string Password2 { get; set; }
     }
 }

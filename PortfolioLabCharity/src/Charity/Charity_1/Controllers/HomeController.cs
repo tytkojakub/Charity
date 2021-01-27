@@ -5,9 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Charity_1.Models;
+using Charity.Models;
 using Charity.Services.Interfaces;
 using Charity.Models.ViewModels;
+using Charity_1.Models;
 
 namespace Charity_1.Controllers
 {
@@ -36,13 +37,13 @@ namespace Charity_1.Controllers
 					List = institutionService.GetAll()
 				};
 			}
-			catch (Exception x){}
+			catch (Exception x) { }
 			return View(model);
 		}
 
 		public IActionResult Error()
 		{
-			return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+			return View(new ErrorViewModel { ErrorId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
 		}
 
 

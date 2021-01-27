@@ -12,12 +12,13 @@ namespace Charity.Models.ViewModels
         public List<CategoryViewModel> CategoriesList {get;set;}
         public Donation Donation { get; set; }
         public List <InstitutionViewModel> InstitutionsList { get; set; }
+        [Range(1,int.MaxValue, ErrorMessage ="Musisz wybrać odbiorcę")]
         public int InstitutionId { get; set; }
 
-        [DataType(DataType.Date)]
+        [DataType(DataType.Date, ErrorMessage = "Wprowadź datę")]
         public DateTime PickUpDateOn { get; set; }
 
-        [DataType(DataType.Time)]
+        [DataType(DataType.Time, ErrorMessage ="Wprowadź godzinę")]
         public DateTime PickUpTimeOn { get; set; }
         public AspNetUser User { get; set; }
         public string PickUpComment { get; set; }

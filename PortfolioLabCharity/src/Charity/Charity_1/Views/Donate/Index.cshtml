@@ -60,6 +60,15 @@
             <form action="../Donate/Index" method="post">
                 <!-- STEP 1: class .active is switching steps -->
                 <div data-step="1" class="active">
+                    <div class="text-danger">
+                        @{ var modelStatesWithErrors = ViewData.ModelState.Where(n => n.Value.Errors.Any()).ToList();
+                                        foreach (var item in modelStatesWithErrors.
+                                            Select(modelStateErrorList => modelStateErrorList.Value.Errors.ToList()).
+                                            SelectMany(error => error))
+                                        {
+                            <h5>@item.ErrorMessage</h5> } }
+                    </div>
+
                     <h3>Zaznacz co chcesz oddać:</h3>
 
                     @for (var i =0; i< Model.CategoriesList.Count;i++)
@@ -104,21 +113,21 @@
                 <!-- STEP 3 -->
                 <div data-step="3">
                     <h3>Wybierz organizację, której chcesz pomóc:</h3>
-                    @foreach (var item in Model.InstitutionsList)
+                    @for (var i = 0; i < Model.InstitutionsList.Count; i++)
                     {
-                <div class="form-group form-group--checkbox">
-                    <label>
-                        <input asp-for="@item.InstitutionTitle" type="hidden" value="@item.InstitutionTitle" />
-                        <input asp-for="@item.Description" type="hidden" value="@item.Description" />
-                        <input asp-for="@item.InstitutionId" type="hidden" value="@item.InstitutionId" />
-                        @Html.RadioButtonFor(m => m.InstitutionId, @item.InstitutionId)
-                        <span class="checkbox radio"></span>
-                        <span class="description">
-                            <div class="title">@item.InstitutionTitle</div>
-                            <div class="subtitle">@item.Description</div>
-                        </span>
-                    </label>
-                </div>
+                    <div class="form-group form-group--checkbox">
+                        <label>
+                            <input asp-for="InstitutionsList[i].InstitutionTitle" type="hidden" value="@Model.InstitutionsList[i].InstitutionTitle" />
+                            <input asp-for="InstitutionsList[i].Description" type="hidden" value="@Model.InstitutionsList[i].Description" />
+                            <input asp-for="InstitutionsList[i].InstitutionId" type="hidden" value="@Model.InstitutionsList[i].InstitutionId" />
+                            @Html.RadioButtonFor(m => m.InstitutionId, Model.InstitutionsList[i].InstitutionId)
+                            <span class="checkbox radio"></span>
+                            <div class="description">
+                                <div class="title">@Model.InstitutionsList[i].InstitutionTitle</div>
+                                <div class="subtitle">@Model.InstitutionsList[i].Description</div>
+                            </div>
+                        </label>
+                    </div>
                     }
 
                     <div class="form-group form-group--buttons">

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using static Charity.Models.ViewModels.DonationViewModel;
+using System.Text.RegularExpressions;
 
 namespace Charity.Mvc.Controllers
 {
@@ -30,7 +31,9 @@ namespace Charity.Mvc.Controllers
         }
         #endregion
 
+        private List<string> _errors;
 
+        [HttpGet]
         public IActionResult Index()
         {
             ViewBag.Title = "Przekaż dary";
@@ -38,9 +41,7 @@ namespace Charity.Mvc.Controllers
             {
                 var listCategory = categoryService.GetAll();
                 var listInstitution = institutionService.GetAll();
-                DonationViewModel model = new DonationViewModel()
-                {
-                };
+                DonationViewModel model = new DonationViewModel();
                 model.CategoriesList = new List<CategoryViewModel>();
                 foreach(var item in listCategory)
                 {
@@ -57,13 +58,17 @@ namespace Charity.Mvc.Controllers
             {
                 throw;
             }
-
         }
-        [HttpPost] //do zapisywania danych z formularza.
+        [HttpPost]
+
         public IActionResult Index([FromForm] DonationViewModel model)
         {
             ViewBag.Title = "Przekazano dary";
-            try
+            if (!ModelState.IsValid)
+            {
+                return View(model); 
+            }
+            if (IsModelValid(model, out _errors))
             {
                 var list = new List<string>();
                 foreach (var item in model.CategoriesList)
@@ -81,12 +86,10 @@ namespace Charity.Mvc.Controllers
                 model.Donation.Institution = institutionService.Get(model.InstitutionId.ToString());
                 model.Donation.PickUpTime = model.PickUpDateOn.AddHours(model.PickUpTimeOn.Hour).AddMinutes(model.PickUpTimeOn.Hour);
                 donationService.Create(model.Donation, list);
+                return View("confirmation");
             }
-            catch (Exception e)
-            {
-                return View();
-            }
-            return   View("confirmation");
+            _errors.ForEach(e => ModelState.AddModelError("", e));
+            return View(model);
         }
         [Authorize]
         public IActionResult DonationsList()
@@ -98,6 +101,32 @@ namespace Charity.Mvc.Controllers
             return View(donation);
         }
 
-        
+        [NonAction]
+        private bool IsModelValid(DonationViewModel model, out List<string> errors)
+        {
+            errors = new List<string>();
+            if (!model.CategoriesList.Any(c => c.IsChecked))
+            {
+                errors.Add("Zaznacz przynajmniej jedną kategorię");
+            }
+            if (model.Donation.PhoneNumber != null)
+            {
+                if (!IsPhoneNumberValid(model.Donation.PhoneNumber))
+                {
+                    errors.Add("Sprawdź numer telefonu. Dozwolone znaki: 0-9, '+- .'. Przykład: 0048.123 456 789");
+                }
+            }
+            if (!(model.PickUpDateOn > DateTime.Now.AddDays(2)))
+            {
+                errors.Add("Wyznacz termin nie wcześniej niż za 3 dni");
+            }
+            return errors.Count == 0;
+        }
+        [NonAction]
+        private bool IsPhoneNumberValid(string numberToCheck)
+        {
+            Regex regex = new Regex(pattern: @"^((00|\+)[1-9]\d)?[\- \.]?[1-9]\d{2}[\- \.]?\d{3}[\- \.]?\d{3}$");
+            return regex.IsMatch(numberToCheck);
+        }
     }
 }
