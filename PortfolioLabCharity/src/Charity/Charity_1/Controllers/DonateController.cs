@@ -60,7 +60,6 @@ namespace Charity.Mvc.Controllers
             }
         }
         [HttpPost]
-
         public IActionResult Index([FromForm] DonationViewModel model)
         {
             ViewBag.Title = "Przekazano dary";

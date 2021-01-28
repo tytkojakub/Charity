@@ -38,7 +38,6 @@ namespace Charity.Models.DbModels
         
         public AspNetUser User { get; set; }
 
-        [Required]
         public Institution Institution { get; set; }
     }
 }

@@ -12,7 +12,8 @@ namespace Charity.Models.ViewModels
         public List<CategoryViewModel> CategoriesList {get;set;}
         public Donation Donation { get; set; }
         public List <InstitutionViewModel> InstitutionsList { get; set; }
-        [Range(1,int.MaxValue, ErrorMessage ="Musisz wybrać odbiorcę")]
+        [Range(1, int.MaxValue, ErrorMessage = "Musisz wybrać odbiorcę")]
+        [Required]
         public int InstitutionId { get; set; }
 
         [DataType(DataType.Date, ErrorMessage = "Wprowadź datę")]
