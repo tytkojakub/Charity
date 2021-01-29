@@ -10,27 +10,25 @@ namespace Charity.Models.DbModels
     {
         [Key]
         public string DonationId { get; set; }
-        [Range(1,100,ErrorMessage ="odbieramy od 1 do 100 worków")]
+
+        [Range(1,100)]
         public int DonationQuantity { get; set; }
         
-        [Required(ErrorMessage ="Podaj ulicę")]
-        [StringLength(150,ErrorMessage ="Za długa nazwa")]
+        [StringLength(150)]
         public string Street { get; set; }
 
-        [Required(ErrorMessage = "Podaj miasto")]
-        [StringLength(50, ErrorMessage = "Za długa nazwa")]
+        [StringLength(50)]
         public string City { get; set; }
 
-        [Required(ErrorMessage = "Podaj kod pocztowy")]
-        [StringLength(10, ErrorMessage = "Za długa nazwa")]
+        [StringLength(10)]
         public string ZipCode { get; set; }
 
         public DateTime PickUpTime { get; set; }
 
-        [StringLength(500, ErrorMessage = "Za długi komentarz")]
+        [StringLength(500)]
         public string PickUpComment { get; set; }
 
-        [StringLength(50, ErrorMessage = "Za długi numer")]
+        [StringLength(50)]
         public string PhoneNumber { get; set; }
         
         //Relationship

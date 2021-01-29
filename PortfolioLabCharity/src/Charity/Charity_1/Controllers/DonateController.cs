@@ -18,16 +18,16 @@ namespace Charity.Mvc.Controllers
     public class DonateController : Controller
     {
         #region Dependency Injection
-        private readonly IDonationService donationService;
-        private readonly IInstitutionService institutionService;
-        private readonly ICategoryService categoryService;
-        private readonly UserManager<AspNetUser> userManager;
+        private readonly IDonationService _donationService;
+        private readonly IInstitutionService _institutionService;
+        private readonly ICategoryService _categoryService;
+        private readonly UserManager<AspNetUser> _userManager;
         public DonateController(IDonationService donationService, IInstitutionService institutionService, ICategoryService categoryService, UserManager<AspNetUser> userManager)
         {
-            this.donationService = donationService;
-            this.institutionService = institutionService;
-            this.categoryService = categoryService;
-            this.userManager = userManager;
+            this._donationService = donationService;
+            this._institutionService = institutionService;
+            this._categoryService = categoryService;
+            this._userManager = userManager;
         }
         #endregion
 
@@ -39,8 +39,8 @@ namespace Charity.Mvc.Controllers
             ViewBag.Title = "Przekaż dary";
             try
             {
-                var listCategory = categoryService.GetAll();
-                var listInstitution = institutionService.GetAll();
+                var listCategory = _categoryService.GetAll();
+                var listInstitution = _institutionService.GetAll();
                 DonationViewModel model = new DonationViewModel();
                 model.CategoriesList = new List<CategoryViewModel>();
                 foreach(var item in listCategory)
@@ -80,11 +80,10 @@ namespace Charity.Mvc.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    model.User = userManager.FindByIdAsync(userId).Result;
+                    model.User = _userManager.FindByIdAsync(userId).Result;
                 }
-                model.Donation.Institution = institutionService.Get(model.InstitutionId.ToString());
-                model.Donation.PickUpTime = model.PickUpDateOn.AddHours(model.PickUpTimeOn.Hour).AddMinutes(model.PickUpTimeOn.Hour);
-                donationService.Create(model.Donation, list);
+                
+                _donationService.Create(model, list);
                 return View("confirmation");
             }
             _errors.ForEach(e => ModelState.AddModelError("", e));
@@ -96,7 +95,7 @@ namespace Charity.Mvc.Controllers
             ViewBag.Title = "Lista darów";
 
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var donation = donationService.GetDonations(userId);
+            var donation = _donationService.GetDonations(userId);
             return View(donation);
         }
 
@@ -108,9 +107,9 @@ namespace Charity.Mvc.Controllers
             {
                 errors.Add("Zaznacz przynajmniej jedną kategorię");
             }
-            if (model.Donation.PhoneNumber != null)
+            if (model.PhoneNumber != null)
             {
-                if (!IsPhoneNumberValid(model.Donation.PhoneNumber))
+                if (!IsPhoneNumberValid(model.PhoneNumber))
                 {
                     errors.Add("Sprawdź numer telefonu. Dozwolone znaki: 0-9, '+- .'. Przykład: 0048.123 456 789");
                 }

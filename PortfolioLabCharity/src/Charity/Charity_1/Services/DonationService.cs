@@ -1,5 +1,6 @@
 ﻿using Charity.Context;
 using Charity.Models.DbModels;
+using Charity.Models.ViewModels;
 using Charity.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,23 +15,38 @@ namespace Charity.Services
         #region injection dependency
 
         private readonly CharityContext _context;
-        public DonationService(CharityContext context)
+        private readonly IInstitutionService _institutionService;
+
+        public DonationService(CharityContext context, IInstitutionService institutionService)
         {
+            _institutionService = institutionService;
             _context = context;
         }
         #endregion 
 
 
 
-        public bool Create(Donation donation, List<string> categoriesId)
+        public bool Create(DonationViewModel donation, List<string> categoriesId)
         {
-            donation.DonationId = Guid.NewGuid().ToString();
-            _context.Donations.Add(donation);
+            var model = new Donation(); 
+            
+            model.Institution = _institutionService.Get(donation.InstitutionId.ToString());
+            model.PickUpTime = donation.PickUpDateOn.AddHours(donation.PickUpTimeOn.Hour).AddMinutes(donation.PickUpTimeOn.Hour);
+            model.DonationId = Guid.NewGuid().ToString();
+            model.City = donation.City;
+            model.DonationQuantity = donation.DonationQuantity;
+            model.PhoneNumber = donation.PhoneNumber;
+            model.Street = donation.Street;
+            model.ZipCode = donation.ZipCode;
+            model.PickUpComment = donation.PickUpComment;
+            model.User = donation.User;
+
+            _context.Donations.Add(model);
             _context.SaveChanges();
             var donationsCategory = new List<DonationCategory>();
             foreach (var item in categoriesId)
             {
-                donationsCategory.Add(new DonationCategory() {CategoryId = item, DonationId = donation.DonationId, Id = Guid.NewGuid().ToString()} );
+                donationsCategory.Add(new DonationCategory() {CategoryId = item, DonationId = model.DonationId, Id = Guid.NewGuid().ToString()} );
             }
             _context.AddRange(donationsCategory);
             return _context.SaveChanges() > 0;

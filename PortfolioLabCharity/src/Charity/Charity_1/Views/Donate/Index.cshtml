@@ -62,16 +62,16 @@
                 <div data-step="1" class="active">
                     <div class="text-danger">
                         @{ var modelStatesWithErrors = ViewData.ModelState.Where(n => n.Value.Errors.Any()).ToList();
-                                        foreach (var item in modelStatesWithErrors.
-                                            Select(modelStateErrorList => modelStateErrorList.Value.Errors.ToList()).
-                                            SelectMany(error => error))
-                                        {
-                            <h5>@item.ErrorMessage</h5> } }
+                            foreach (var item in modelStatesWithErrors.
+                                Select(modelStateErrorList => modelStateErrorList.Value.Errors.ToList()).
+                                SelectMany(error => error))
+                            {
+                                <h4>@item.ErrorMessage</h4> } }
                     </div>
 
                     <h3>Zaznacz co chcesz oddać:</h3>
 
-                    @for (var i =0; i< Model.CategoriesList.Count;i++)
+                    @for (var i = 0; i < Model.CategoriesList.Count; i++)
                     {
                         <div class="form-group form-group--checkbox">
                             <label>
@@ -80,8 +80,11 @@
                                 <input asp-for=CategoriesList[i].IsChecked type="checkbox" />
                                 <span class="checkbox"></span>
                                 <span class="description">@Model.CategoriesList[i].CategoryName</span>
-                            </label> 
-                        </div> 
+                            </label>
+                            <span asp-validation-for="CategoriesList" class="text-danger"></span>
+
+
+                        </div>
                     }
 
 
@@ -97,8 +100,8 @@
                     <div class="form-group form-group--inline">
                         <label>
                             Liczba 60l worków:
-                            <input asp-for="Donation.DonationQuantity" class="form-control" />
-                            <span asp-validation-for="Donation.DonationQuantity" class="text-danger"></span>
+                            <input asp-for="DonationQuantity" class="form-control" />
+                            <span asp-validation-for="DonationQuantity" class="text-danger"></span>
                         </label>
                     </div>
 
@@ -129,6 +132,8 @@
                             </label>
                         </div>
                     }
+                    <span asp-validation-for="InstitutionId" class="text-danger"></span>
+
 
                     <div class="form-group form-group--buttons">
                         <button type="button" class="btn prev-step">Wstecz</button>
@@ -144,23 +149,23 @@
                         <div class="form-section--column">
                             <h4>Adres odbioru</h4>
                             <div class="form-group form-group--inline">
-                                <label> Ulica <input asp-for="Donation.Street" type="text" id="street" /> </label>
-                                <span asp-validation-for="Donation.Street" class="text-danger"></span>
+                                <label> Ulica <input asp-for="Street" type="text" id="street" /> </label>
+                                <span asp-validation-for="Street" class="text-danger"></span>
                             </div>
 
                             <div class="form-group form-group--inline">
-                                <label> Miasto <input asp-for="Donation.City" type="text" id="city" /> </label>
-                                <span asp-validation-for="Donation.City" class="text-danger"></span>
+                                <label> Miasto <input asp-for="City" type="text" id="city" /> </label>
+                                <span asp-validation-for="City" class="text-danger"></span>
                             </div>
 
                             <div class="form-group form-group--inline">
-                                <label>Kod pocztowy <input asp-for="Donation.ZipCode" type="text" id="postcode" /></label>
-                                <span asp-validation-for="Donation.ZipCode" class="text-danger"></span>
+                                <label>Kod pocztowy <input asp-for="ZipCode" type="text" id="postcode" /></label>
+                                <span asp-validation-for="ZipCode" class="text-danger"></span>
                             </div>
 
                             <div class="form-group form-group--inline">
-                                <label> Numer telefonu <input asp-for="Donation.PhoneNumber" type="number" id="phone" /></label>
-                                <span asp-validation-for="Donation.PhoneNumber" class="text-danger"></span>
+                                <label> Numer telefonu <input asp-for="PhoneNumber" type="number" id="phone" /></label>
+                                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                             </div>
                         </div>
 
@@ -178,8 +183,10 @@
                             <div class="form-group form-group--inline">
                                 <label>
                                     Uwagi dla kuriera
-                                    <textarea asp-for="Donation.PickUpComment" name="moreInfo" rows="5" id="moreInfo"></textarea>
+                                    <textarea asp-for="PickUpComment" name="moreInfo" rows="5" id="moreInfo"></textarea>
                                 </label>
+                                <span asp-validation-for="PickUpComment" class="text-danger"></span>
+
                             </div>
                         </div>
                     </div>
