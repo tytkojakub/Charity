@@ -172,13 +172,16 @@
 		new FormSteps(form);
 	}
 	//PODSUMOWANIE - PRZEKAZANIE DANYCH
-	// ilosć worków
 	const showResults = document.getElementById('showResults');
+
+	// ilosć worków
 	showResults.addEventListener('click', () => {
 		const bagsCount = document.querySelector("#bags").value;
 		document.querySelector('#bagsResult').innerText = bagsCount + " ";
 	})
 	//fundacja
+
+	//kategoria
 
 	// ulica
 	showResults.addEventListener('click', () => {

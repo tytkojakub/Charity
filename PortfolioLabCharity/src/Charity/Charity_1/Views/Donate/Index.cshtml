@@ -75,7 +75,7 @@
                     {
                         <div class="form-group form-group--checkbox">
                             <label>
-                                <input asp-for=CategoriesList[i].CategoryName type="hidden" value=@Model.CategoriesList[i].CategoryName />
+                                <input asp-for=CategoriesList[i].CategoryName type="hidden" value=@Model.CategoriesList[i].CategoryName id="category"/>
                                 <input asp-for=CategoriesList[i].CategoryId type="hidden" value=@Model.CategoriesList[i].CategoryId />
                                 <input asp-for=CategoriesList[i].IsChecked type="checkbox" />
                                 <span class="checkbox"></span>
@@ -100,7 +100,7 @@
                     <div class="form-group form-group--inline">
                         <label>
                             Liczba 60l worków:
-                            <input asp-for="DonationQuantity" class="form-control" />
+                            <input asp-for="DonationQuantity" class="form-control" id="bags" />
                             <span asp-validation-for="DonationQuantity" class="text-danger"></span>
                         </label>
                     </div>
@@ -120,9 +120,9 @@
                     {
                         <div class="form-group form-group--checkbox">
                             <label>
-                                <input asp-for="InstitutionsList[i].InstitutionTitle" type="hidden" value="@Model.InstitutionsList[i].InstitutionTitle" />
-                                <input asp-for="InstitutionsList[i].Description" type="hidden" value="@Model.InstitutionsList[i].Description" />
-                                <input asp-for="InstitutionsList[i].InstitutionId" type="hidden" value="@Model.InstitutionsList[i].InstitutionId" />
+                                <input asp-for="InstitutionsList[i].InstitutionTitle" type="hidden" name="institution" value="@Model.InstitutionsList[i].InstitutionTitle" />
+                                <input asp-for="InstitutionsList[i].Description" type="hidden" name="institution" value="@Model.InstitutionsList[i].Description" />
+                                <input asp-for="InstitutionsList[i].InstitutionId" type="hidden" name="institution" value="@Model.InstitutionsList[i].InstitutionId" />
                                 @Html.RadioButtonFor(m => m.InstitutionId, Model.InstitutionsList[i].InstitutionId)
                                 <span class="checkbox radio"></span>
                                 <div class="description">
@@ -207,13 +207,16 @@
                                 <li>
                                     <span class="icon icon-bag"></span>
                                     <span id="bagsResult"></span>
-                                    <span class="summary--text"> - worki ubrań w dobrym stanie dla dzieci</span>
+                                    <span class="summary--text"> - worki </span>
+                                    <span id="categoriesResult"></span>
+
                                 </li>
 
                                 <li>
                                     <span class="icon icon-hand"></span>
-                                    <span id="organizationResult"></span>
+                                    <span id="institutionResult"></span>
                                 </li>
+
                             </ul>
                         </div>
 
