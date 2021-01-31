@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Charity.Models.DbModels.Donation>
+<header>
+    @Html.Partial("_PartialHeadNavi")
+
+</header>
+
+<section class="col table-bordered table-light">
+
+    <table class="table table-bordered">
+        <thead>
+
+            <tr>
+                <th>
+                    Instytucja
+                </th>
+
+                <th>
+                    Ilość worków
+                </th>
+                <th>
+                    Data przekazania daru
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Institution.InstitutionTitle)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DonationQuantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PickUpTime)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>
+
+
+@Html.Partial("_PartialPageFooter")
+
+
+

@@ -69,7 +69,12 @@ namespace Charity.Services
 
         public IList<Donation> GetAll()
         {
-            return _context.Donations.ToList();
+            var donation = _context.Donations
+                .OrderByDescending(d => d.PickUpTime)
+                .Include(d => d.DonationCategory)
+                .ThenInclude(c => c.Category)
+                .Include(d => d.Institution);
+            return donation.ToList();
         }
 
         public bool Update(Donation donation)

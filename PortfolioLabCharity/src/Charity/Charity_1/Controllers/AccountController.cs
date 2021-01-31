@@ -19,13 +19,15 @@ namespace Charity.Controllers
         private readonly UserManager<AspNetUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUserManagerService _userManagerService;
+        private readonly IDonationService _donationService;
 
-        public AccountController(SignInManager<AspNetUser> signInManager, UserManager<AspNetUser> userManager, RoleManager<IdentityRole> roleManager, IUserManagerService userManagerService)
+        public AccountController(SignInManager<AspNetUser> signInManager, UserManager<AspNetUser> userManager, RoleManager<IdentityRole> roleManager, IUserManagerService userManagerService, IDonationService donationService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _roleManager = roleManager;
             _userManagerService = userManagerService;
+            _donationService = donationService;
         }
         #endregion
         [HttpGet]
@@ -114,5 +116,13 @@ namespace Charity.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        public ActionResult DonationList()
+        {
+            ViewBag.Title = "Lista darów";
+            var model = _donationService.GetAll();
+            return View(model);
+        }
+
     }
 }
