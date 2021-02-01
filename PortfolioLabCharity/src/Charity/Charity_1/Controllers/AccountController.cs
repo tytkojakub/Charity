@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Charity.Models.DbModels;
 using Charity.Models.ViewModels;
@@ -75,6 +76,7 @@ namespace Charity.Controllers
                     throw new Exception("Database exception");
                 }
             }
+            TempData["warning_regerror"] = "Wprowadź popranie dane";
             return View(model);
         }
         [HttpGet]
@@ -90,6 +92,7 @@ namespace Charity.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["warning_data"] = "Podaj e-mail i hasło";
                 return View(model);
             }
 
@@ -104,7 +107,7 @@ namespace Charity.Controllers
             var login = await _signInManager.PasswordSignInAsync(user.UserName, model.Password, true, false);
             if (login.Succeeded)
             {
-                return RedirectToAction("Index", "Dashboard");
+                return RedirectToAction("Index", "Home");
             }
 
             TempData["warning_password"] = "Podano nieprawidowe hasło";
@@ -116,13 +119,15 @@ namespace Charity.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
+
+        [Authorize]
         [HttpGet]
         public ActionResult DonationList()
         {
             ViewBag.Title = "Lista darów";
-            var model = _donationService.GetAll();
-            return View(model);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var donation = _donationService.GetDonations(userId);
+            return View(donation);
         }
-
     }
 }

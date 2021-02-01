@@ -1,4 +1,4 @@
-﻿@model Charity.Models.ViewModels.RegistrationViewModel
+﻿@model Charity.Models.ViewModels.LoginViewModel
 
 <header>
     @Html.Partial("_PartialHeadNavi")
@@ -7,13 +7,17 @@
 <section class="login-page">
     <h2>Zaloguj się</h2>
     <form asp-action="Login">
+        @TempData["warning_data"]
+
         <div class="form-group">
             <input asp-for="Email" type="email" name="email" placeholder="Email" />
         </div>
+        @TempData["warning_email"]
         <div class="form-group">
             <input asp-for="Password" type="password" name="password" placeholder="Hasło" />
             <a href="#" class="btn btn--small btn--without-border reset-password">Przypomnij hasło</a>
         </div>
+        @TempData["warning_password"]
 
         <div class="form-group form-group--buttons">
             <a asp-controller="Account" asp-action="Registration" class="btn btn--without-border">Załóż konto</a>

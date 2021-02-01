@@ -89,15 +89,6 @@ namespace Charity.Mvc.Controllers
             _errors.ForEach(e => ModelState.AddModelError("", e));
             return View(model);
         }
-        [Authorize]
-        public IActionResult DonationsList()
-        {
-            ViewBag.Title = "Lista darów";
-
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var donation = _donationService.GetDonations(userId);
-            return View(donation);
-        }
 
         [NonAction]
         private bool IsModelValid(DonationViewModel model, out List<string> errors)

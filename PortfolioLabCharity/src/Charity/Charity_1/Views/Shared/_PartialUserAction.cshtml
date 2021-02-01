@@ -5,23 +5,21 @@
 @{
     if (User.Identity.IsAuthenticated)
     {
-    <ul class="nav--actions">
-        <li class="logged-user">
-            Witaj @Manager.GetUserName(Context.User)            
-            <ul class="dropdown">
-                <li><a href="#">Profil</a></li>
-                <li><a href="#">Ustawienia</a></li>
-                <li><a href="#">Moje zbiórki</a></li>
-                <li><a asp-controller="Account" asp-action="Logout">Wyloguj</a></li>
-            </ul>
-        </li>
-    </ul>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @Manager.GetUserName(Context.User)
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" asp-controller="Account" asp-action="DonationList">Moje zbiórki</a>
+                <a class="dropdown-item" asp-controller="Account" asp-action="Logout">Wyloguj</a>
+            </div>
+        </div>
     }
     else
     {
-    <ul class="nav--actions">
-        <li><a asp-controller="Account" asp-action="Login" class="btn btn--small btn--without-border">Zaloguj</a></li>
-        <li><a asp-controller="Account" asp-action="Registration" class="btn btn--small btn--highlighted">Załóż konto</a></li>
-    </ul>
+        <ul class="nav--actions">
+            <li><a asp-controller="Account" asp-action="Login" class="btn btn--small btn--without-border">Zaloguj</a></li>
+            <li><a asp-controller="Account" asp-action="Registration" class="btn btn--small btn--highlighted">Załóż konto</a></li>
+        </ul>
     }
 }
