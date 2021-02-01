@@ -19,10 +19,6 @@ namespace Charity_1
 {
     public class Startup
     {
-        //public Startup(IConfiguration configuration)
-        //{
-        //    Configuration = configuration;
-        //}
         public Startup()
         {
             var configurationBuilder = new ConfigurationBuilder();
@@ -32,7 +28,6 @@ namespace Charity_1
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
@@ -54,12 +49,8 @@ namespace Charity_1
 
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //W³¹czanie Us³ugi Asp.Net Core Identity  - tylko czy to jest potrzebne?
-            //app.UseIdentity();
-            //app..UseMvcWithDefaultRoute();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
